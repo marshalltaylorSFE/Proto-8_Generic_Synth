@@ -1,12 +1,13 @@
 ### Proto-8_Generic_Synth
 #### *A build up of a proto-8 with generic panel*
 
-<a href="SynthPhoto.jpg"><img src="https://raw.githubusercontent.com/marshalltaylorSFE/Proto-8_Generic_Synth/master/Documentation/SynthPhoto.jpg" align="center" height="240" width="320" ></a>
+<a href="https://raw.githubusercontent.com/marshalltaylorSFE/Proto-8_Generic_Synth/master/Documentation/SynthPhoto.jpg"><img src="https://raw.githubusercontent.com/marshalltaylorSFE/Proto-8_Generic_Synth/master/Documentation/SynthPhoto.jpg" align="center" height="240" width="320" ></a>
 
 ------
 
 #### Overview
- Starting from a panel connected to the hardware, this repo shows the build up of software that results in a simple midi synth.  At start, the hardware passes the hardware test example but otherwise no software is written.
+
+Starting from a panel connected to the hardware, this repo shows the build up of software that results in a simple midi synth.  At start, the hardware passes the hardware test example but otherwise no software is written.
  
  ### Milestones
  

@@ -9,7 +9,7 @@
 
 Starting from a panel connected to the hardware, this repo shows the build up of software that results in a simple midi synth.  At start, the hardware passes the hardware test example but otherwise no software is written.
  
- ### Milestones
+#### Milestones
  
  Each milestone is listed here, and the repository is tagged at each milestone.
 

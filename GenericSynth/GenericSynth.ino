@@ -12,40 +12,29 @@
 
 
 //Not used by this sketch but dependant on one 
+#include "stdint.h"
 #include "Wire.h"
+#include "timerModule32.h"
+#include "panelComponents.h"
+
+#define LEDPIN 13
 
 //Globals
 uint32_t maxTimer = 60000000;
 uint32_t maxInterval = 2000000;
-
-#define LEDPIN 13
-#include "timerModule32.h"
-#include "stdint.h"
+uint32_t usTicks = 0;
+uint8_t usTicksLocked = 1; //start locked out
 
 IntervalTimer myTimer; //Interrupt for Teensy
-
-//**Copy to make a new timer******************//  
-//TimerClass32 usTimerA( 20000 ); //20 ms
 
 //**Current list of timers********************//
 TimerClass32 debugTimer( 1000000 ); //1 second
 TimerClass32 serialTimer( 500000 ); //500ms
+TimerClass32 knobTimer( 5000 ); //5ms
 
-//Note on TimerClass-
-//Change with usTimerA.setInterval( <the new interval> );
+//components
+Windowed10BitKnob myKnob;
 
-
-uint32_t usTicks = 0;
-
-//  The lock works like this:
-//
-//    When the interrupt fires, the lock is removed.  Now
-//    the main free-wheeling loop can update the change to
-//    the timerModules.  Once complete, the lock is replaced
-//    so that it can't update more than once per firing
-//    of the interrupt
-
-uint8_t usTicksLocked = 1; //start locked out
 void setup()
 {
   //Serial.begin(9600);
@@ -53,7 +42,7 @@ void setup()
   Serial.begin(115200);
   // initialize IntervalTimer
   myTimer.begin(serviceUS, 1);  // serviceMS to run every 0.000001 seconds
-
+  myKnob.setHardware( new ArduinoAnalogIn( A1 ));
 }
 
 void loop()
@@ -65,6 +54,7 @@ void loop()
 		//msTimerA.update(usTicks);
 		debugTimer.update(usTicks);
 		serialTimer.update(usTicks);
+		knobTimer.update(usTicks);
 		
 		//Done?  Lock it back up
 		usTicksLocked = 1;
@@ -85,6 +75,15 @@ void loop()
     {
         //User code
         Serial.println("Hello World");
+    }
+    if(knobTimer.flagStatus() == PENDING)
+    {
+        //User code
+        myKnob.freshen(5);
+		if(myKnob.serviceChanged())
+		{
+			Serial.println(myKnob.getState());
+		}
     }
 }
 

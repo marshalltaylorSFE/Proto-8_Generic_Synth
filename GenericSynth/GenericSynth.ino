@@ -16,6 +16,7 @@
 #include "Wire.h"
 #include "timerModule32.h"
 #include "panelComponents.h"
+#include "KnobPanel.h"
 
 #define LEDPIN 13
 
@@ -27,13 +28,12 @@ uint8_t usTicksLocked = 1; //start locked out
 
 IntervalTimer myTimer; //Interrupt for Teensy
 
+KnobPanel myCustomPanel;
+
 //**Current list of timers********************//
 TimerClass32 debugTimer( 1000000 ); //1 second
 TimerClass32 serialTimer( 500000 ); //500ms
 TimerClass32 knobTimer( 5000 ); //5ms
-
-//components
-Windowed10BitKnob myKnob;
 
 void setup()
 {
@@ -42,7 +42,7 @@ void setup()
   Serial.begin(115200);
   // initialize IntervalTimer
   myTimer.begin(serviceUS, 1);  // serviceMS to run every 0.000001 seconds
-  myKnob.setHardware( new ArduinoAnalogIn( A1 ));
+  myCustomPanel.reset();
 }
 
 void loop()
@@ -78,12 +78,7 @@ void loop()
     }
     if(knobTimer.flagStatus() == PENDING)
     {
-        //User code
-        myKnob.freshen(5);
-		if(myKnob.serviceChanged())
-		{
-			Serial.println(myKnob.getState());
-		}
+		myCustomPanel.tickStateMachine(5);  //5 ms timer
     }
 }
 

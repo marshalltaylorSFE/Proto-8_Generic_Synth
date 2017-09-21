@@ -17,6 +17,7 @@
 #include "timerModule32.h"
 #include "panelComponents.h"
 #include "KnobPanel.h"
+#include "proto-8Hardware.h"
 
 #define LEDPIN 13
 
@@ -26,6 +27,10 @@ uint32_t maxInterval = 2000000;
 uint32_t usTicks = 0;
 uint8_t usTicksLocked = 1; //start locked out
 
+LEDShiftRegister LEDs;
+AnalogMuxTree knobs;
+SwitchMatrix switches;
+
 IntervalTimer myTimer; //Interrupt for Teensy
 
 KnobPanel myCustomPanel;
@@ -33,16 +38,24 @@ KnobPanel myCustomPanel;
 //**Current list of timers********************//
 TimerClass32 debugTimer( 1000000 ); //1 second
 TimerClass32 serialTimer( 500000 ); //500ms
-TimerClass32 knobTimer( 5000 ); //5ms
+TimerClass32 panelTimer( 5000 ); //5ms
+TimerClass32 LEDsTimer(20);
+TimerClass32 switchesTimer(500);
+TimerClass32 knobsTimer(500);
+
 
 void setup()
 {
   //Serial.begin(9600);
-  pinMode(LEDPIN, OUTPUT);
   Serial.begin(115200);
   // initialize IntervalTimer
   myTimer.begin(serviceUS, 1);  // serviceMS to run every 0.000001 seconds
   myCustomPanel.reset();
+
+    LEDs.begin();
+    knobs.begin();
+    switches.begin();
+
 }
 
 void loop()
@@ -54,7 +67,10 @@ void loop()
 		//msTimerA.update(usTicks);
 		debugTimer.update(usTicks);
 		serialTimer.update(usTicks);
-		knobTimer.update(usTicks);
+		panelTimer.update(usTicks);
+		LEDsTimer.update(usTicks);
+		switchesTimer.update(usTicks);
+		knobsTimer.update(usTicks);
 		
 		//Done?  Lock it back up
 		usTicksLocked = 1;
@@ -76,9 +92,21 @@ void loop()
         //User code
         Serial.println("Hello World");
     }
-    if(knobTimer.flagStatus() == PENDING)
+    if(panelTimer.flagStatus() == PENDING)
     {
 		myCustomPanel.tickStateMachine(5);  //5 ms timer
+    }
+    if(LEDsTimer.flagStatus() == PENDING)
+    {
+		LEDs.send();
+    }
+    if(switchesTimer.flagStatus() == PENDING)
+    {
+		switches.scan();
+    }
+    if(knobsTimer.flagStatus() == PENDING)
+    {
+		knobs.scan();
     }
 }
 

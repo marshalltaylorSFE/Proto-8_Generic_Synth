@@ -57,6 +57,62 @@ KnobPanel::KnobPanel( void )
 	add( &C6Knob );
 	add( &C7Knob );
 	add( &C8Knob );
+
+	A1Led.setHardware(new Proto8DigitalOut( 25 ), 0);
+	A2Led.setHardware(new Proto8DigitalOut( 26 ), 0);
+	A3Led.setHardware(new Proto8DigitalOut( 27 ), 0);
+	A4Led.setHardware(new Proto8DigitalOut( 28 ), 0);
+	A5Led.setHardware(new Proto8DigitalOut( 29 ), 0);
+	A6Led.setHardware(new Proto8DigitalOut( 30 ), 0);
+	A7Led.setHardware(new Proto8DigitalOut( 31 ), 0);
+	A8Led.setHardware(new Proto8DigitalOut( 32 ), 0);
+
+	add( &A1Led );
+	add( &A2Led );
+	add( &A3Led );
+	add( &A4Led );
+	add( &A5Led );
+	add( &A6Led );
+	add( &A7Led );
+	add( &A8Led );
+
+	B1Led.setHardware(new Proto8DigitalOut( 17 ), 0);
+	B2Led.setHardware(new Proto8DigitalOut( 18 ), 0);
+	B3Led.setHardware(new Proto8DigitalOut( 19 ), 0);
+	B4Led.setHardware(new Proto8DigitalOut( 20 ), 0);
+	B5Led.setHardware(new Proto8DigitalOut( 21 ), 0);
+	B6Led.setHardware(new Proto8DigitalOut( 22 ), 0);
+	B7Led.setHardware(new Proto8DigitalOut( 23 ), 0);
+	B8Led.setHardware(new Proto8DigitalOut( 24 ), 0);
+
+	add( &B1Led );
+	add( &B2Led );
+	add( &B3Led );
+	add( &B4Led );
+	add( &B5Led );
+	add( &B6Led );
+	add( &B7Led );
+	add( &B8Led );
+
+	A1Button.setHardware(new Proto8DigitalIn( 2,1 ), 0);
+	A2Button.setHardware(new Proto8DigitalIn( 2,2 ), 0);
+	A3Button.setHardware(new Proto8DigitalIn( 2,3 ), 0);
+	A4Button.setHardware(new Proto8DigitalIn( 2,4 ), 0);
+
+	add( &A1Button );
+	add( &A2Button );
+	add( &A3Button );
+	add( &A4Button );
+
+	B1Button.setHardware(new Proto8DigitalIn( 1,1 ), 0);
+	B2Button.setHardware(new Proto8DigitalIn( 1,2 ), 0);
+	B3Button.setHardware(new Proto8DigitalIn( 1,3 ), 0);
+	B4Button.setHardware(new Proto8DigitalIn( 1,4 ), 0);
+
+	add( &B1Button );
+	add( &B2Button );
+	add( &B3Button );
+	add( &B4Button );
 	
 	state = PInit;
 }
@@ -78,6 +134,7 @@ void KnobPanel::tickStateMachine( int msTicksDelta )
 	{
 	case PInit:
 		nextState = PRun;
+		A3Led.setState(LEDON);
 		break;
 	case PRun:
 		if( A1Knob.serviceChanged() )
@@ -94,6 +151,18 @@ void KnobPanel::tickStateMachine( int msTicksDelta )
 		{
 			Serial.print("knob C-1: ");
 			Serial.println(C1Knob.getState());
+		}
+		if( A1Button.serviceRisingEdge() )
+		{
+			A1Led.setState(LEDON);
+		}
+		if( A2Button.serviceRisingEdge() )
+		{
+			A1Led.setState(LEDOFF);
+		}
+		if( B1Button.serviceRisingEdge() )
+		{
+			A2Led.setState(LEDFLASHING);
 		}
 		break;
 	default:

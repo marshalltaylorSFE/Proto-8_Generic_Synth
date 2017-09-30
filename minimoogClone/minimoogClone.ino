@@ -7,6 +7,20 @@
 #include "KnobPanel.h"
 #include "proto-8Hardware.h"
 
+#include <Audio.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
+#include <SerialFlash.h>
+
+// GUItool: begin automatically generated code
+AudioSynthWaveformSine   sine1;          //xy=497,207
+AudioOutputI2S           i2s1;           //xy=717,205
+AudioConnection          patchCord1(sine1, 0, i2s1, 0);
+AudioConnection          patchCord2(sine1, 0, i2s1, 1);
+AudioControlSGTL5000     sgtl5000_1;     //xy=705,293
+// GUItool: end automatically generated code
+
 //Globals
 uint32_t maxTimer = 60000000;
 uint32_t maxInterval = 2000000;
@@ -36,6 +50,14 @@ void setup()
 	myTimer.begin(serviceUS, 1);  // serviceMS to run every 0.000001 seconds
 	myCustomPanel.reset();
 
+	//**** Audio Section ****//
+	AudioMemory(35);
+	
+	sine1.frequency(220);
+	sine1.amplitude(1.0);
+	sgtl5000_1.enable();
+	sgtl5000_1.volume(0.5);
+	
     LEDs.begin();
     knobs.begin();
     switches.begin();

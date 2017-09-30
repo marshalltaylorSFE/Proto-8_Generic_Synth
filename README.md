@@ -8,6 +8,10 @@
 #### Overview
 
 Starting from a panel connected to the hardware, this repo shows the build up of software that results in a simple midi synth.  At start, the hardware passes the hardware test example but otherwise no software is written.
+
+#### Other Documentation
+
+* [Minimoog Clone Mapping](https://github.com/marshalltaylorSFE/Proto-8_Generic_Synth/blob/master/Documentation/minimoogCloneInfo.md) - Knob locations for the Minimoog clone on the generic Proto-8.
  
 #### Milestones
  

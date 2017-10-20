@@ -10,4 +10,4 @@
 #### *Component Map*
 
 * KA-8: Master Volume
- 
+* LB-5: Gate LED
